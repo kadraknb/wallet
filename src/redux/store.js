@@ -9,4 +9,23 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(reduxThunk)),
 );
 
+// store.subscribe(() => {
+//   console.log(store.getState());
+//   store.getState().walletReducer.expenses.forEach((aa) => {
+//     const total += Number(aa.exchangeRates[aa.currency].ask) * Number(aa.value);
+//     console.log(total.toFixed(2));
+//   });
+//   //  total;
+// });
+
+// store.subscribe(() => {
+//   console.log(store.getState());
+//   store
+//     .getState()
+//     .walletReducer.expenses.reduce(
+//       (aa) => Number(aa.exchangeRates[aa.currency].ask) * Number(aa.value),
+//       0,
+//     );
+// });
+// export { total };
 export default store;

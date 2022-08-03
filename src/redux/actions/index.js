@@ -1,14 +1,26 @@
 export const GET_EMAIL = 'GET_EMAIL';
 export const GET_CURRENCIES = 'GET_CURRENCIES';
+export const GET_EXPENSES = 'GET_EXPENSES';
+export const TOTALBRL = 'TOTALBRL';
 
-export const loginAction = (par1) => ({
+export const loginAction = (payload) => ({
   type: GET_EMAIL,
-  payload: par1,
+  payload,
 });
 
-export const currenciasAction = (par1) => ({
+export const currenciasAction = (payload) => ({
   type: GET_CURRENCIES,
-  payload: par1,
+  payload,
+});
+
+export const expensesAction = (payload) => ({
+  type: GET_EXPENSES,
+  payload,
+});
+
+export const totalBRLAction = (payload) => ({
+  type: TOTALBRL,
+  payload,
 });
 
 // export default { loginAction, currenciasAction };
