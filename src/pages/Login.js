@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { loginAction } from '../redux/actions';
 
@@ -30,7 +31,8 @@ class Login extends React.Component {
   submit = () => {
     const { email } = this.state;
     const { history, dispatch } = this.props;
-    // console.log(this.props.dispatch);
+
+    console.log(history);
     dispatch(loginAction(email));
     // console.log(dispatch(loginAction(email)));
     // console.log(window.store);
@@ -61,6 +63,11 @@ class Login extends React.Component {
   }
 }
 
-// const mapStateToProps = (state) => ({ seila: state });
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
+};
 
 export default connect()(Login);

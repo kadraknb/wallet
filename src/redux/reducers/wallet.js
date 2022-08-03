@@ -1,4 +1,4 @@
-import { GET_CURRENCIES, GET_EXPENSES, TOTALBRL } from '../actions';
+import { GET_CURRENCIES, GET_EXPENSES, REMOVE_EXPENSES, TOTALBRL } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -17,6 +17,12 @@ function walletReducer(state = INITIAL_STATE, action) {
     return {
       ...state,
       expenses: [...state.expenses, ...action.payload],
+    };
+  case REMOVE_EXPENSES:
+    return {
+      ...state,
+      expenses: state.expenses.filter((aa) => aa.id !== action.payload.id),
+      totalBRL: Math.abs(state.totalBRL - action.payload.value),
     };
   case TOTALBRL:
     return {

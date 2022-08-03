@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import fetch from 'node-fetch';
 import PropTypes from 'prop-types';
 
 import { currenciasAction, expensesAction, totalBRLAction } from '../redux/actions';
@@ -48,7 +47,7 @@ class WalletForm extends Component {
 
     const expense = {
       id: expenses.length,
-      value: despesa,
+      value: Number(despesa).toFixed(2),
       description,
       currency,
       method,
