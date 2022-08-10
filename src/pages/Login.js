@@ -45,6 +45,7 @@ class Login extends React.Component {
       <form>
         <input
           type="email"
+          autoComplete="email"
           data-testid="email-input"
           value={ email }
           onChange={ (e) => this.change(e) }

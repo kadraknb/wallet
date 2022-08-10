@@ -9,9 +9,13 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(reduxThunk)),
 );
 
+if (window.Cypress) {
+  window.store = store;
+}
+
 // store.subscribe(() => {
 //   console.log(store.getState());
-//   store.getState().walletReducer.expenses.forEach((aa) => {
+//   store.getState().wallet.expenses.forEach((aa) => {
 //     const total += Number(aa.exchangeRates[aa.currency].ask) * Number(aa.value);
 //     console.log(total.toFixed(2));
 //   });
@@ -22,7 +26,7 @@ const store = createStore(
 //   console.log(store.getState());
 //   store
 //     .getState()
-//     .walletReducer.expenses.reduce(
+//     .wallet.expenses.reduce(
 //       (aa) => Number(aa.exchangeRates[aa.currency].ask) * Number(aa.value),
 //       0,
 //     );

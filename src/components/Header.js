@@ -18,7 +18,7 @@ class Header extends Component {
       <div>
         <h4 data-testid="email-field">{store.user.email}</h4>
         <div data-testid="total-field">
-          {store.walletReducer.totalBRL.toFixed(2)}
+          {store.wallet.totalBRL.toFixed(2)}
         </div>
         <p data-testid="header-currency-field">BRL</p>
       </div>
@@ -31,7 +31,7 @@ Header.propTypes = {
     user: PropTypes.shape({
       email: PropTypes.string,
     }),
-    walletReducer: PropTypes.shape({
+    wallet: PropTypes.shape({
       totalBRL: PropTypes.number,
     }),
   }).isRequired,

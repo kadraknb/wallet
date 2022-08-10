@@ -9,8 +9,13 @@ class Table extends Component {
     dispatch(removExpensesAction(id));
   }
 
+  editExpenses = (id) => {
+    const { store: { wallet: { funEdit } } } = this.props;
+    funEdit(id);
+  }
+
   render() {
-    const { store: { walletReducer: { expenses } } } = this.props;
+    const { store: { wallet: { expenses } } } = this.props;
     return (
       <table>
         <thead>
@@ -28,34 +33,45 @@ class Table extends Component {
         </thead>
         <tbody>
           {expenses
-            && expenses.map((aa) => (
-              <tr key={ aa.id }>
-                <td>{aa.description}</td>
-                <td>{aa.tag}</td>
-                <td>{aa.method}</td>
-                <td>{aa.value}</td>
-                <td>{aa.exchangeRates[aa.currency].name}</td>
-                <td>{aa.tag}</td>
-                <td>
-                  {Number(aa.exchangeRates[aa.currency].ask) * Number(aa.value)}
-                </td>
-                <td>{Number(aa.exchangeRates[aa.currency].ask).toFixed(2)}</td>
-                <td>
-                  <button
-                    data-testid="delete-btn"
-                    type="button"
-                    onClick={ () => this.removExpenses({
-                      id: aa.id,
-                      value:
-                          Number(aa.exchangeRates[aa.currency].ask)
-                          * Number(aa.value),
-                    }) }
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            ))}
+            && expenses.map((aa) => {
+              const ValorConvertido = Number(aa.exchangeRates[aa.currency].ask)
+               * Number(aa.value);
+              return (
+                <tr key={ aa.id }>
+                  <td>{aa.description}</td>
+                  <td>{aa.tag}</td>
+                  <td>{aa.method}</td>
+                  <td>{Number(aa.value).toFixed(2)}</td>
+                  <td>{aa.exchangeRates[aa.currency].name}</td>
+                  <td>{aa.tag}</td>
+                  <td>
+                    {ValorConvertido.toFixed(2)}
+                  </td>
+                  <td>{Number(aa.exchangeRates[aa.currency].ask).toFixed(2)}</td>
+                  <td>
+                    <button
+                      data-testid="edit-btn"
+                      type="button"
+                      onClick={ () => this.editExpenses({
+                        id: aa.id,
+                        value: ValorConvertido,
+                      }) }
+                    >
+                      Editar
+                    </button>
+                    <button
+                      data-testid="delete-btn"
+                      type="button"
+                      onClick={ () => this.removExpenses({
+                        id: aa.id,
+                        value: ValorConvertido,
+                      }) }
+                    >
+                      Excluir
+                    </button>
+                  </td>
+                </tr>);
+            })}
         </tbody>
       </table>
     );
@@ -64,14 +80,15 @@ class Table extends Component {
 
 Table.propTypes = {
   store: PropTypes.shape({
-    walletReducer: PropTypes.shape({
+    wallet: PropTypes.shape({
       currencies: PropTypes.arrayOf(PropTypes.string),
       expenses: PropTypes.arrayOf(PropTypes.shape()),
+      funEdit: PropTypes.func,
     }),
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({ store: state });
+const mapStateToProps = (store) => ({ store });
 
 export default connect(mapStateToProps)(Table);

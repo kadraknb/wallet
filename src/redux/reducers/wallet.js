@@ -1,12 +1,20 @@
-import { GET_CURRENCIES, GET_EXPENSES, REMOVE_EXPENSES, TOTALBRL } from '../actions';
+import {
+  EDIT_TABLEL,
+  FUN_EDIT_TABLEL,
+  GET_CURRENCIES,
+  GET_EXPENSES,
+  REMOVE_EXPENSES,
+  TOTALBRL,
+} from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
   totalBRL: 0,
+  funEdit: () => '',
 };
 
-function walletReducer(state = INITIAL_STATE, action) {
+function wallet(state = INITIAL_STATE, action) {
   switch (action.type) {
   case GET_CURRENCIES:
     return {
@@ -14,6 +22,8 @@ function walletReducer(state = INITIAL_STATE, action) {
       currencies: [...state.currencies, ...action.payload],
     };
   case GET_EXPENSES:
+    console.log(state.expenses);
+    console.log(action.payload);
     return {
       ...state,
       expenses: [...state.expenses, ...action.payload],
@@ -29,9 +39,20 @@ function walletReducer(state = INITIAL_STATE, action) {
       ...state,
       totalBRL: state.totalBRL + action.payload,
     };
+  case EDIT_TABLEL:
+    state.expenses.splice(action.payload.id, 1, action.payload.expense);
+    return {
+      ...state,
+      totalBRL: Math.abs(state.totalBRL + action.payload.changeTotalBRL),
+    };
+  case FUN_EDIT_TABLEL:
+    return {
+      ...state,
+      funEdit: action.payload,
+    };
   default:
     return state;
   }
 }
 
-export default walletReducer;
+export default wallet;

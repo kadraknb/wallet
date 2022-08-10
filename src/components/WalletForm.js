@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { currenciasAction, expensesAction, totalBRLAction } from '../redux/actions';
+import {
+  currenciasAction,
+  editTableLAction,
+  expensesAction,
+  funEditTableAction,
+  totalBRLAction,
+} from '../redux/actions';
 
 const ALIMENTACAO = 'Alimentação';
 
@@ -16,17 +22,23 @@ class WalletForm extends Component {
       currency: 'USD',
       method: 'Dinheiro',
       tag: ALIMENTACAO,
+      removTotalBRL: 0,
+      idToEdit: '',
+      buttonEdit: true,
     };
   }
 
   componentDidMount() {
-    const fetchApi = async () => {
-      const { dispatch } = this.props;
-      const api = await this.getCurrencias();
-      dispatch(currenciasAction(Object.keys(api).filter((aa) => aa !== 'USDT')));
-    };
-    fetchApi();
+    const { dispatch } = this.props;
+    dispatch(funEditTableAction(this.editExpenses));
+    this.fetchApi();
   }
+
+  fetchApi = async () => {
+    const { dispatch } = this.props;
+    const api = await this.getCurrencias();
+    dispatch(currenciasAction(Object.keys(api).filter((aa) => aa !== 'USDT')));
+  };
 
   getCurrencias = async () => {
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
@@ -39,15 +51,36 @@ class WalletForm extends Component {
     dispatch(totalBRLAction(Number(total)));
   }
 
-  submit = async (aa) => {
-    aa.preventDefault();
-    const api = await this.getCurrencias();
-    const { dispatch, store: { walletReducer: { expenses } } } = this.props;
+  newExpense = async () => {
+    const exchangeRates = await this.getCurrencias();
+    const { store: { wallet: { expenses } } } = this.props;
     const { despesa, description, currency, method, tag } = this.state;
 
     const expense = {
       id: expenses.length,
       value: Number(despesa).toFixed(2),
+      description,
+      currency,
+      method,
+      tag,
+      exchangeRates,
+      removTotalBRL: Number(exchangeRates[currency].ask)
+      * Number(despesa),
+      ADD_TotalBRL: Number(exchangeRates[currency].ask)
+      * Number(despesa),
+    };
+    return expense;
+  }
+
+  submit = async (aa) => {
+    aa.preventDefault();
+    const api = await this.getCurrencias();
+    const { dispatch, store: { wallet: { expenses } } } = this.props;
+    const { despesa, description, currency, method, tag } = this.state;
+
+    const expense = {
+      id: expenses.length,
+      value: despesa,
       description,
       currency,
       method,
@@ -73,9 +106,70 @@ class WalletForm extends Component {
     this.setState({ [name]: value });
   }
 
+  // expota pela store
+  editExpenses = (id) => {
+    const { store: { wallet: { expenses } } } = this.props;
+    console.log(id.id);
+    console.log(expenses);
+    const data = expenses.find((aa) => aa.id === id.id);
+    console.log(data);
+
+    this.setState({
+      buttonEdit: false,
+      despesa: data.value,
+      description: data.description,
+      currency: data.currency,
+      method: data.method,
+      tag: data.tag,
+      idToEdit: id.id,
+      removTotalBRL: id.value,
+    });
+  }
+
+  editTableSubmit = async (aa) => {
+    aa.preventDefault();
+    const { store: { wallet: { expenses } }, dispatch } = this.props;
+    const {
+      despesa,
+      description,
+      currency,
+      method,
+      tag,
+      idToEdit,
+      removTotalBRL,
+    } = this.state;
+    console.log(removTotalBRL);
+    const exchangeRates = await this.getCurrencias();
+    const editExpense = {
+      expense: {
+        id: expenses.length,
+        value: despesa,
+        description,
+        currency,
+        method,
+        tag,
+        exchangeRates },
+      changeTotalBRL: Number(exchangeRates[currency].ask)
+      * Number(despesa) - removTotalBRL,
+    };
+    // return expense;
+    // const expense = await this.newExpense();
+    editExpense.expense.id = idToEdit;
+    console.log(idToEdit);
+    dispatch(editTableLAction(editExpense));
+    this.setState({
+      despesa: '',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: ALIMENTACAO,
+      buttonEdit: true,
+    });
+  }
+
   render() {
-    const { despesa, description, currency, method, tag } = this.state;
-    const { store: { walletReducer: { currencies } } } = this.props;
+    const { despesa, description, currency, method, tag, buttonEdit } = this.state;
+    const { store: { wallet: { currencies } } } = this.props;
     return (
       <form>
         <input
@@ -124,8 +218,14 @@ class WalletForm extends Component {
           <option>Transporte</option>
           <option>Saúde</option>
         </select>
-        <button type="submit" onClick={ (aa) => this.submit(aa) }>
-          Adicionar despesa
+        <button
+          type="submit"
+          onClick={ (aa) => {
+            const button = buttonEdit ? this.submit(aa) : this.editTableSubmit(aa);
+            return button;
+          } }
+        >
+          { buttonEdit ? 'Adicionar despesa' : 'Editar despesa' }
         </button>
       </form>
     );
@@ -134,7 +234,7 @@ class WalletForm extends Component {
 
 WalletForm.propTypes = {
   store: PropTypes.shape({
-    walletReducer: PropTypes.shape({
+    wallet: PropTypes.shape({
       currencies: PropTypes.arrayOf(PropTypes.string),
       expenses: PropTypes.arrayOf(PropTypes.shape()),
     }),
@@ -144,4 +244,5 @@ WalletForm.propTypes = {
 
 const mapStateToProps = (state) => ({ store: state });
 
+// console.log(WalletForm);
 export default connect(mapStateToProps)(WalletForm);
