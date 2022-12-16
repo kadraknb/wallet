@@ -5,7 +5,7 @@ import Wallet from './pages/Wallet';
 import './App.css';
 
 function App() {
-  const [router, setRouter] = useState('Wallet');
+  const [router, setRouter] = useState('Login');
 
   const routers = {
     Login: <Login router={ setRouter } />,

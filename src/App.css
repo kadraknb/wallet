@@ -1,8 +1,22 @@
 #W_main {
   background-color: #1a1d28;
-  min-width: 100%;
+  min-width: 100vw;
   min-height: 100vh;
   overflow-x: auto;
   display: flex;
   justify-content: center;
+}
+@media (max-width: 840px) {
+  #W_main {
+    zoom: 70%;
+  min-height: 143vh;
+
+  }
+}
+@media (max-width: 566px) {
+  #W_main {
+    zoom: 50%;
+  min-height: 200vh;
+
+  }
 }

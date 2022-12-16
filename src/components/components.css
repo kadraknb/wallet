@@ -53,11 +53,9 @@
 #W_table th {
   background-color: #252734;
   border: 2px #2c3153 solid ;
-  padding: 0 10px;
   margin: 0;
 }
 #W_table td {
   background-color: #252734;
   border: 2px #2c3153 solid ;
-  width: 50%;
 }
