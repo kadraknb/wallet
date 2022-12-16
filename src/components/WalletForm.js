@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import './components.css';
 
 import {
   currenciasAction,
@@ -38,13 +39,13 @@ class WalletForm extends Component {
     const { dispatch } = this.props;
     const api = await this.getCurrencias();
     dispatch(currenciasAction(Object.keys(api).filter((aa) => aa !== 'USDT')));
-  };
+  }
 
   getCurrencias = async () => {
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
     const api = await response.json();
     return api;
-  };
+  }
 
   totalBRL = (despesa, api, currency, dispatch) => {
     const total = Number(api[currency].ask) * Number(despesa);
@@ -106,13 +107,9 @@ class WalletForm extends Component {
     this.setState({ [name]: value });
   }
 
-  // expota pela store
   editExpenses = (id) => {
     const { store: { wallet: { expenses } } } = this.props;
-    console.log(id.id);
-    console.log(expenses);
     const data = expenses.find((aa) => aa.id === id.id);
-    console.log(data);
 
     this.setState({
       buttonEdit: false,
@@ -138,7 +135,6 @@ class WalletForm extends Component {
       idToEdit,
       removTotalBRL,
     } = this.state;
-    console.log(removTotalBRL);
     const exchangeRates = await this.getCurrencias();
     const editExpense = {
       expense: {
@@ -148,14 +144,12 @@ class WalletForm extends Component {
         currency,
         method,
         tag,
-        exchangeRates },
+        exchangeRates,
+      },
       changeTotalBRL: Number(exchangeRates[currency].ask)
       * Number(despesa) - removTotalBRL,
     };
-    // return expense;
-    // const expense = await this.newExpense();
     editExpense.expense.id = idToEdit;
-    console.log(idToEdit);
     dispatch(editTableLAction(editExpense));
     this.setState({
       despesa: '',
@@ -171,33 +165,35 @@ class WalletForm extends Component {
     const { despesa, description, currency, method, tag, buttonEdit } = this.state;
     const { store: { wallet: { currencies } } } = this.props;
     return (
-      <form>
+      <form id="W_Form_WF">
         <input
+          className="W_input_WF"
+          placeholder="valor"
           type="number"
           name="despesa"
           value={ despesa }
           onChange={ (ee) => this.change(ee) }
-          data-testid="value-input"
         />
         <input
+          className="W_input_WF"
+          placeholder="descrição"
           type="text"
           name="description"
           value={ description }
           onChange={ (ee) => this.change(ee) }
-          data-testid="description-input"
         />
         <select
-          data-testid="currency-input"
+          className="W_select"
           name="currency"
           value={ currency }
           onChange={ (ee) => this.change(ee) }
         >
-          {currencies.map((aa) => (
-            <option key={ aa }>{aa}</option>
+          {currencies.map((aa, index) => (
+            <option key={ `${aa}-${index}` }>{aa}</option>
           ))}
         </select>
         <select
-          data-testid="method-input"
+          className="W_select"
           name="method"
           value={ method }
           onChange={ (ee) => this.change(ee) }
@@ -207,7 +203,7 @@ class WalletForm extends Component {
           <option>Cartão de débito</option>
         </select>
         <select
-          data-testid="tag-input"
+          className="W_select"
           name="tag"
           value={ tag }
           onChange={ (ee) => this.change(ee) }
@@ -219,6 +215,7 @@ class WalletForm extends Component {
           <option>Saúde</option>
         </select>
         <button
+          className="W_butoon"
           type="submit"
           onClick={ (aa) => {
             const button = buttonEdit ? this.submit(aa) : this.editTableSubmit(aa);
@@ -244,5 +241,4 @@ WalletForm.propTypes = {
 
 const mapStateToProps = (state) => ({ store: state });
 
-// console.log(WalletForm);
 export default connect(mapStateToProps)(WalletForm);
