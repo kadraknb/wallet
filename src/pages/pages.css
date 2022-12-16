@@ -1,0 +1,47 @@
+#login_main_flex {
+  display: flex;
+  justify-content: center;
+}
+#W_login {
+  position: fixed;
+  background-image: url('../login.svg');
+  height: 400px;
+  width: 400px;
+  margin-top: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#W_form_login {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 50px 0 0 -120px;
+}
+.W_F_input {
+  background-color: rgba(240, 248, 255, 0);
+  border: 5px;
+  border-style: dotted ;
+  border-color: #7e5c62;
+  color: rgba(0, 0, 0, 0.432);
+  width: 130px;
+}
+.W_F_input::placeholder {
+  color: #64484e;
+}
+.W_F_input:focus {
+  outline: 0;
+}
+#W_Bt_login {
+  color: #5c546a;
+  width: min-content;
+  border: 0;
+  background-color: #7e5c6244;
+}
+/* ///////////////////////// */
+#wallet_main {
+  width: 800px;
+  min-height: 400px;
+  color: azure;
+}

@@ -1,0 +1,64 @@
+#W_Header_main {
+  background-color: #36394d;
+  display: flex;
+  justify-content: space-between;
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 16px;
+
+}
+#W_Form_WF {
+  display: flex;
+  justify-content: space-between;
+  align-self: baseline;
+  margin: 10px 0 20px;
+  border: #525ca3 solid 3px;
+  border-radius: 5px;
+
+}
+.W_input_WF {
+  background-color: rgb(205, 206, 218);
+  width: 100px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+}
+.W_select {
+  height: 28px;
+  color: white;
+  background-color: #4b4f68;
+  border: none;
+  border-radius: 6px;
+}
+.W_butoon {
+  background-color: #525ca3;
+  border: none;
+  color: white;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  height: 28px;
+}
+.W_butoon:nth-child(2) {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+#W_Form_WF .W_butoon {
+  margin-left: 20px;
+}
+#W_table {
+  border: 2px #2c3153 solid ;
+
+}
+#W_table th {
+  background-color: #252734;
+  border: 2px #2c3153 solid ;
+  margin: 0;
+}
+#W_table td {
+  background-color: #252734;
+  border: 2px #2c3153 solid ;
+}
+#two_button {
+  width: 100px;
+}
