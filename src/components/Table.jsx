@@ -65,7 +65,7 @@ class Table extends Component {
                     {' '}
                     {ValorConvertido.toFixed(2)}
                   </td>
-                  <td>
+                  <td id='two_button'>
                     <button
                       className="W_butoon"
                       type="button"
